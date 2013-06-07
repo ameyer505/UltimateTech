@@ -18,6 +18,10 @@
  using System.Management;
  using System.IO;
  using System.Diagnostics;
+ using System.Linq;
+ using Microsoft.Win32;
+ using System.Security.Permissions;
+ using System.Collections;
 
 
  
@@ -53,8 +57,10 @@ namespace ComputerStatus
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.tabControl1 = new System.Windows.Forms.TabControl();
+			this.tab_control = new System.Windows.Forms.TabControl();
 			this.local_computer_tab = new System.Windows.Forms.TabPage();
+			this.domain = new System.Windows.Forms.TextBox();
+			this.domain_label = new System.Windows.Forms.Label();
 			this.cpu_percent_label = new System.Windows.Forms.Label();
 			this.ram_inuse_label = new System.Windows.Forms.Label();
 			this.current_user = new System.Windows.Forms.TextBox();
@@ -68,6 +74,8 @@ namespace ComputerStatus
 			this.ram_usage_label = new System.Windows.Forms.Label();
 			this.computer_name_label = new System.Windows.Forms.Label();
 			this.network_tab = new System.Windows.Forms.TabPage();
+			this.gateway = new System.Windows.Forms.TextBox();
+			this.gateway_label = new System.Windows.Forms.Label();
 			this.reset_net_button = new System.Windows.Forms.Button();
 			this.network_test_button = new System.Windows.Forms.Button();
 			this.refresh_button = new System.Windows.Forms.Button();
@@ -93,28 +101,43 @@ namespace ComputerStatus
 			this.chk_dsk = new System.Windows.Forms.Button();
 			this.sfc_scan = new System.Windows.Forms.Button();
 			this.drive_name_label = new System.Windows.Forms.Label();
+			this.software_tab = new System.Windows.Forms.TabPage();
+			this.program_list = new System.Windows.Forms.ListView();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.devel = new System.Windows.Forms.Label();
 			this.linked_in = new System.Windows.Forms.LinkLabel();
-			this.tabControl1.SuspendLayout();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.menuStrip2 = new System.Windows.Forms.MenuStrip();
+			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.outputToTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.emailOutputTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.osVersion_label = new System.Windows.Forms.Label();
+			this.osVersion = new System.Windows.Forms.TextBox();
+			this.tab_control.SuspendLayout();
 			this.local_computer_tab.SuspendLayout();
 			this.network_tab.SuspendLayout();
 			this.local_storage_tab.SuspendLayout();
+			this.software_tab.SuspendLayout();
+			this.menuStrip2.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// tabControl1
+			// tab_control
 			// 
-			this.tabControl1.Controls.Add(this.local_computer_tab);
-			this.tabControl1.Controls.Add(this.network_tab);
-			this.tabControl1.Controls.Add(this.local_storage_tab);
-			this.tabControl1.Location = new System.Drawing.Point(12, 12);
-			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(385, 209);
-			this.tabControl1.TabIndex = 0;
+			this.tab_control.Controls.Add(this.local_computer_tab);
+			this.tab_control.Controls.Add(this.network_tab);
+			this.tab_control.Controls.Add(this.local_storage_tab);
+			this.tab_control.Controls.Add(this.software_tab);
+			this.tab_control.Location = new System.Drawing.Point(12, 23);
+			this.tab_control.Name = "tab_control";
+			this.tab_control.SelectedIndex = 0;
+			this.tab_control.Size = new System.Drawing.Size(385, 209);
+			this.tab_control.TabIndex = 0;
 			// 
 			// local_computer_tab
 			// 
+			this.local_computer_tab.Controls.Add(this.domain);
+			this.local_computer_tab.Controls.Add(this.domain_label);
 			this.local_computer_tab.Controls.Add(this.cpu_percent_label);
 			this.local_computer_tab.Controls.Add(this.ram_inuse_label);
 			this.local_computer_tab.Controls.Add(this.current_user);
@@ -135,9 +158,25 @@ namespace ComputerStatus
 			this.local_computer_tab.Text = "Local Computer";
 			this.local_computer_tab.UseVisualStyleBackColor = true;
 			// 
+			// domain
+			// 
+			this.domain.Location = new System.Drawing.Point(241, 41);
+			this.domain.Name = "domain";
+			this.domain.ReadOnly = true;
+			this.domain.Size = new System.Drawing.Size(130, 20);
+			this.domain.TabIndex = 13;
+			// 
+			// domain_label
+			// 
+			this.domain_label.Location = new System.Drawing.Point(195, 44);
+			this.domain_label.Name = "domain_label";
+			this.domain_label.Size = new System.Drawing.Size(48, 23);
+			this.domain_label.TabIndex = 12;
+			this.domain_label.Text = "Domain:";
+			// 
 			// cpu_percent_label
 			// 
-			this.cpu_percent_label.Location = new System.Drawing.Point(118, 154);
+			this.cpu_percent_label.Location = new System.Drawing.Point(124, 154);
 			this.cpu_percent_label.Name = "cpu_percent_label";
 			this.cpu_percent_label.Size = new System.Drawing.Size(98, 23);
 			this.cpu_percent_label.TabIndex = 11;
@@ -145,7 +184,7 @@ namespace ComputerStatus
 			// 
 			// ram_inuse_label
 			// 
-			this.ram_inuse_label.Location = new System.Drawing.Point(118, 97);
+			this.ram_inuse_label.Location = new System.Drawing.Point(144, 98);
 			this.ram_inuse_label.Name = "ram_inuse_label";
 			this.ram_inuse_label.Size = new System.Drawing.Size(78, 23);
 			this.ram_inuse_label.TabIndex = 10;
@@ -153,15 +192,15 @@ namespace ComputerStatus
 			// 
 			// current_user
 			// 
-			this.current_user.Location = new System.Drawing.Point(118, 41);
+			this.current_user.Location = new System.Drawing.Point(94, 41);
 			this.current_user.Name = "current_user";
 			this.current_user.ReadOnly = true;
-			this.current_user.Size = new System.Drawing.Size(220, 20);
+			this.current_user.Size = new System.Drawing.Size(98, 20);
 			this.current_user.TabIndex = 9;
 			// 
 			// current_user_label
 			// 
-			this.current_user_label.Location = new System.Drawing.Point(22, 41);
+			this.current_user_label.Location = new System.Drawing.Point(6, 41);
 			this.current_user_label.Name = "current_user_label";
 			this.current_user_label.Size = new System.Drawing.Size(100, 23);
 			this.current_user_label.TabIndex = 8;
@@ -169,15 +208,15 @@ namespace ComputerStatus
 			// 
 			// cpu_percent
 			// 
-			this.cpu_percent.Location = new System.Drawing.Point(215, 151);
+			this.cpu_percent.Location = new System.Drawing.Point(228, 151);
 			this.cpu_percent.Name = "cpu_percent";
 			this.cpu_percent.ReadOnly = true;
-			this.cpu_percent.Size = new System.Drawing.Size(123, 20);
+			this.cpu_percent.Size = new System.Drawing.Size(143, 20);
 			this.cpu_percent.TabIndex = 7;
 			// 
 			// ram_ratio
 			// 
-			this.ram_ratio.Location = new System.Drawing.Point(195, 97);
+			this.ram_ratio.Location = new System.Drawing.Point(228, 98);
 			this.ram_ratio.Name = "ram_ratio";
 			this.ram_ratio.ReadOnly = true;
 			this.ram_ratio.Size = new System.Drawing.Size(143, 20);
@@ -185,29 +224,29 @@ namespace ComputerStatus
 			// 
 			// cpu_usage
 			// 
-			this.cpu_usage.Location = new System.Drawing.Point(118, 124);
+			this.cpu_usage.Location = new System.Drawing.Point(94, 124);
 			this.cpu_usage.Name = "cpu_usage";
-			this.cpu_usage.Size = new System.Drawing.Size(220, 23);
+			this.cpu_usage.Size = new System.Drawing.Size(244, 23);
 			this.cpu_usage.TabIndex = 5;
 			// 
 			// ram_progress_bar
 			// 
-			this.ram_progress_bar.Location = new System.Drawing.Point(118, 67);
+			this.ram_progress_bar.Location = new System.Drawing.Point(94, 67);
 			this.ram_progress_bar.Name = "ram_progress_bar";
-			this.ram_progress_bar.Size = new System.Drawing.Size(220, 23);
+			this.ram_progress_bar.Size = new System.Drawing.Size(277, 23);
 			this.ram_progress_bar.TabIndex = 4;
 			// 
 			// computer_name
 			// 
-			this.computer_name.Location = new System.Drawing.Point(118, 12);
+			this.computer_name.Location = new System.Drawing.Point(94, 12);
 			this.computer_name.Name = "computer_name";
 			this.computer_name.ReadOnly = true;
-			this.computer_name.Size = new System.Drawing.Size(220, 20);
+			this.computer_name.Size = new System.Drawing.Size(277, 20);
 			this.computer_name.TabIndex = 3;
 			// 
 			// cpu_usage_label
 			// 
-			this.cpu_usage_label.Location = new System.Drawing.Point(22, 124);
+			this.cpu_usage_label.Location = new System.Drawing.Point(6, 124);
 			this.cpu_usage_label.Name = "cpu_usage_label";
 			this.cpu_usage_label.Size = new System.Drawing.Size(100, 23);
 			this.cpu_usage_label.TabIndex = 2;
@@ -215,7 +254,7 @@ namespace ComputerStatus
 			// 
 			// ram_usage_label
 			// 
-			this.ram_usage_label.Location = new System.Drawing.Point(22, 67);
+			this.ram_usage_label.Location = new System.Drawing.Point(6, 67);
 			this.ram_usage_label.Name = "ram_usage_label";
 			this.ram_usage_label.Size = new System.Drawing.Size(100, 23);
 			this.ram_usage_label.TabIndex = 1;
@@ -223,7 +262,7 @@ namespace ComputerStatus
 			// 
 			// computer_name_label
 			// 
-			this.computer_name_label.Location = new System.Drawing.Point(22, 12);
+			this.computer_name_label.Location = new System.Drawing.Point(6, 12);
 			this.computer_name_label.Name = "computer_name_label";
 			this.computer_name_label.Size = new System.Drawing.Size(100, 23);
 			this.computer_name_label.TabIndex = 0;
@@ -231,6 +270,8 @@ namespace ComputerStatus
 			// 
 			// network_tab
 			// 
+			this.network_tab.Controls.Add(this.gateway);
+			this.network_tab.Controls.Add(this.gateway_label);
 			this.network_tab.Controls.Add(this.reset_net_button);
 			this.network_tab.Controls.Add(this.network_test_button);
 			this.network_tab.Controls.Add(this.refresh_button);
@@ -249,6 +290,22 @@ namespace ComputerStatus
 			this.network_tab.TabIndex = 1;
 			this.network_tab.Text = "Network";
 			this.network_tab.UseVisualStyleBackColor = true;
+			// 
+			// gateway
+			// 
+			this.gateway.Location = new System.Drawing.Point(260, 52);
+			this.gateway.Name = "gateway";
+			this.gateway.ReadOnly = true;
+			this.gateway.Size = new System.Drawing.Size(85, 20);
+			this.gateway.TabIndex = 12;
+			// 
+			// gateway_label
+			// 
+			this.gateway_label.Location = new System.Drawing.Point(208, 52);
+			this.gateway_label.Name = "gateway_label";
+			this.gateway_label.Size = new System.Drawing.Size(55, 23);
+			this.gateway_label.TabIndex = 11;
+			this.gateway_label.Text = "Gateway:";
 			// 
 			// reset_net_button
 			// 
@@ -301,7 +358,7 @@ namespace ComputerStatus
 			this.ip_addr.Location = new System.Drawing.Point(117, 52);
 			this.ip_addr.Name = "ip_addr";
 			this.ip_addr.ReadOnly = true;
-			this.ip_addr.Size = new System.Drawing.Size(228, 20);
+			this.ip_addr.Size = new System.Drawing.Size(84, 20);
 			this.ip_addr.TabIndex = 5;
 			// 
 			// current_interface
@@ -476,52 +533,167 @@ namespace ComputerStatus
 			this.drive_name_label.TabIndex = 0;
 			this.drive_name_label.Text = "Drive Volume:";
 			// 
+			// software_tab
+			// 
+			this.software_tab.Controls.Add(this.osVersion);
+			this.software_tab.Controls.Add(this.osVersion_label);
+			this.software_tab.Controls.Add(this.program_list);
+			this.software_tab.Location = new System.Drawing.Point(4, 22);
+			this.software_tab.Name = "software_tab";
+			this.software_tab.Padding = new System.Windows.Forms.Padding(3);
+			this.software_tab.Size = new System.Drawing.Size(377, 183);
+			this.software_tab.TabIndex = 3;
+			this.software_tab.Text = "Software";
+			this.software_tab.UseVisualStyleBackColor = true;
+			// 
+			// program_list
+			// 
+			this.program_list.Activation = System.Windows.Forms.ItemActivation.OneClick;
+			this.program_list.HoverSelection = true;
+			this.program_list.Location = new System.Drawing.Point(6, 37);
+			this.program_list.Name = "program_list";
+			this.program_list.Size = new System.Drawing.Size(365, 140);
+			this.program_list.TabIndex = 0;
+			this.program_list.UseCompatibleStateImageBehavior = false;
+			this.program_list.View = System.Windows.Forms.View.Details;
+			// 
 			// backgroundWorker1
 			// 
 			this.backgroundWorker1.WorkerReportsProgress = true;
 			// 
 			// devel
 			// 
-			this.devel.Location = new System.Drawing.Point(16, 223);
+			this.devel.Location = new System.Drawing.Point(12, 235);
 			this.devel.Name = "devel";
-			this.devel.Size = new System.Drawing.Size(196, 23);
+			this.devel.Size = new System.Drawing.Size(196, 18);
 			this.devel.TabIndex = 1;
-			this.devel.Text = "Written and Developed by: Alex Meyer";
+			this.devel.Text = "Written and Developed by Alex Meyer";
 			// 
 			// linked_in
 			// 
-			this.linked_in.Location = new System.Drawing.Point(297, 223);
+			this.linked_in.AllowDrop = true;
+			this.linked_in.LinkArea = new System.Windows.Forms.LinkArea(0, 16);
+			this.linked_in.Location = new System.Drawing.Point(297, 235);
 			this.linked_in.Name = "linked_in";
-			this.linked_in.Size = new System.Drawing.Size(100, 23);
+			this.linked_in.Size = new System.Drawing.Size(100, 18);
 			this.linked_in.TabIndex = 2;
 			this.linked_in.TabStop = true;
 			this.linked_in.Text = "LinkedIn Profile";
-			this.linked_in.Links.Add(0,16,"http://goo.gl/TW5Da");
 			this.linked_in.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Linked_inLinkClicked);
+			// 
+			// menuStrip1
+			// 
+			this.menuStrip1.Location = new System.Drawing.Point(0, 24);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(413, 24);
+			this.menuStrip1.TabIndex = 3;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// menuStrip2
+			// 
+			this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.fileToolStripMenuItem});
+			this.menuStrip2.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip2.Name = "menuStrip2";
+			this.menuStrip2.Size = new System.Drawing.Size(413, 24);
+			this.menuStrip2.TabIndex = 4;
+			this.menuStrip2.Text = "menuStrip2";
+			// 
+			// fileToolStripMenuItem
+			// 
+			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.outputToTextFileToolStripMenuItem,
+									this.emailOutputTextFileToolStripMenuItem,
+									this.exitToolStripMenuItem});
+			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+			this.fileToolStripMenuItem.Text = "File";
+			// 
+			// outputToTextFileToolStripMenuItem
+			// 
+			this.outputToTextFileToolStripMenuItem.Name = "outputToTextFileToolStripMenuItem";
+			this.outputToTextFileToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+			this.outputToTextFileToolStripMenuItem.Text = "Output to Text File";
+			// 
+			// emailOutputTextFileToolStripMenuItem
+			// 
+			this.emailOutputTextFileToolStripMenuItem.Name = "emailOutputTextFileToolStripMenuItem";
+			this.emailOutputTextFileToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+			this.emailOutputTextFileToolStripMenuItem.Text = "Email Output Text File";
+			// 
+			// exitToolStripMenuItem
+			// 
+			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+			this.exitToolStripMenuItem.Text = "Exit";
+			// 
+			// osVersion_label
+			// 
+			this.osVersion_label.Location = new System.Drawing.Point(7, 7);
+			this.osVersion_label.Name = "osVersion_label";
+			this.osVersion_label.Size = new System.Drawing.Size(69, 23);
+			this.osVersion_label.TabIndex = 1;
+			this.osVersion_label.Text = "OS Version:";
+			// 
+			// osVersion
+			// 
+			this.osVersion.Location = new System.Drawing.Point(78, 4);
+			this.osVersion.Name = "osVersion";
+			this.osVersion.ReadOnly = true;
+			this.osVersion.Size = new System.Drawing.Size(293, 20);
+			this.osVersion.TabIndex = 2;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(413, 243);
+			this.ClientSize = new System.Drawing.Size(413, 253);
 			this.Controls.Add(this.linked_in);
 			this.Controls.Add(this.devel);
-			this.Controls.Add(this.tabControl1);
+			this.Controls.Add(this.tab_control);
+			this.Controls.Add(this.menuStrip1);
+			this.Controls.Add(this.menuStrip2);
+			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainForm";
 			this.Text = "UltimateTech";
-			this.tabControl1.ResumeLayout(false);
+			this.tab_control.ResumeLayout(false);
 			this.local_computer_tab.ResumeLayout(false);
 			this.local_computer_tab.PerformLayout();
 			this.network_tab.ResumeLayout(false);
 			this.network_tab.PerformLayout();
 			this.local_storage_tab.ResumeLayout(false);
 			this.local_storage_tab.PerformLayout();
+			this.software_tab.ResumeLayout(false);
+			this.software_tab.PerformLayout();
+			this.menuStrip2.ResumeLayout(false);
+			this.menuStrip2.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 			
+			setupTabs();
+		}
+		private System.Windows.Forms.TextBox osVersion;
+		private System.Windows.Forms.Label osVersion_label;
+		private System.Windows.Forms.ToolStripMenuItem emailOutputTextFileToolStripMenuItem;
+		private System.Windows.Forms.Label gateway_label;
+		private System.Windows.Forms.TextBox gateway;
+		private System.Windows.Forms.Label domain_label;
+		private System.Windows.Forms.TextBox domain;
+		private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem outputToTextFileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+		private System.Windows.Forms.MenuStrip menuStrip2;
+		private System.Windows.Forms.MenuStrip menuStrip1;
+		private System.Windows.Forms.ListView program_list;
+		private System.Windows.Forms.TabPage software_tab;
+		
+		void setupTabs(){
 			setLocal();
 			setNetwork();
 			setlocalStorage();
+			setupSoftwareTab();
 		}
+		
 		private System.Windows.Forms.LinkLabel linked_in;
 		private System.Windows.Forms.Label devel;
 		private System.Windows.Forms.Button reset_net_button;
@@ -564,7 +736,7 @@ namespace ComputerStatus
 		private System.Windows.Forms.Label current_interface_label;
 		private System.Windows.Forms.TabPage network_tab;
 		private System.Windows.Forms.TabPage local_computer_tab;
-		private System.Windows.Forms.TabControl tabControl1;
+		private System.Windows.Forms.TabControl tab_control;
 		
 		//Refresh Button
 		void Button1Click(object sender, System.EventArgs e)
@@ -581,7 +753,9 @@ namespace ComputerStatus
 		
 		void setLocal(){
 			computer_name.Text = getComputerName();
-			current_user.Text = getCurrentUser();
+			string[] fullName = getCurrentUser();
+			domain.Text = fullName[0];
+			current_user.Text = fullName[1];
 			getTotalRAM();
 		}
 		
@@ -617,10 +791,10 @@ namespace ComputerStatus
 		}
 		
 		
-		string getCurrentUser(){
+		string[] getCurrentUser(){
 			string full = System.Security.Principal.WindowsIdentity.GetCurrent().Name.ToString();
 			string[] split = full.Split('\\');
-			return split[1];
+			return split;
 		}
 		
 		string getComputerName(){
@@ -633,6 +807,7 @@ namespace ComputerStatus
 			foreach (NetworkInterface nic in interfaces){
 				if(nic.OperationalStatus == OperationalStatus.Up){
 					internet = nic.Name;
+					gateway.Text = nic.GetIPProperties().GatewayAddresses.FirstOrDefault().Address.ToString();
 					break;
 				}
 			}
@@ -751,8 +926,9 @@ namespace ComputerStatus
 			drive_label.Text = initial.VolumeLabel;
 			double init_avail = ((double)(initial.AvailableFreeSpace))/1024/1024/1024;
 			double init_total = ((double)(initial.TotalSize))/1024/1024/1024;
-			hdd_storage.Text = "Free Space: "+init_avail.ToString("#.##")+" GB  /  Total Space: "+init_total.ToString("#.##")+" GB";
-			double ratio = (double)initial.AvailableFreeSpace/(double)initial.TotalSize;
+			double used = init_total-init_avail;
+			hdd_storage.Text = "Used Space: "+used.ToString("#.##")+" GB  /  Total Space: "+init_total.ToString("#.##")+" GB";
+			double ratio = ((double)initial.TotalSize-(double)initial.AvailableFreeSpace)/(double)initial.TotalSize;
 			hdd_ratio_bar.Value = (int)(ratio*100);
 			percent_used.Text = (int)(ratio*100)+"%";
 			
@@ -771,8 +947,8 @@ namespace ComputerStatus
 				drive_format.Text = drive.DriveFormat;
 				double avail = ((double)(drive.AvailableFreeSpace))/1024/1024/1024;
 				double total = ((double)(drive.TotalSize))/1024/1024/1024;
-				hdd_storage.Text = "Free Space: "+avail.ToString("#.##")+" GB  /  Total Space: "+total.ToString("#.##")+" GB";
-				double ratio = (double)drive.AvailableFreeSpace/(double)drive.TotalSize;
+				hdd_storage.Text = "Used Space: "+(total-avail).ToString("#.##")+" GB  /  Total Space: "+total.ToString("#.##")+" GB";
+				double ratio = ((double)drive.TotalSize-(double)drive.AvailableFreeSpace)/(double)drive.TotalSize;
 				hdd_ratio_bar.Value = (int)(ratio*100);
 				percent_used.Text = (int)(ratio*100)+"%";
 				}
@@ -827,7 +1003,48 @@ namespace ComputerStatus
 		
 		void Linked_inLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
+			String link = "http://goo.gl/TW5Da";
+			System.Diagnostics.Process.Start(link);
+		}
+		
+		void setupSoftwareTab(){
+			string osVer = (from val in new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem").Get().OfType<ManagementObject>() select val.GetPropertyValue("Caption")).FirstOrDefault().ToString();
+			string type = System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
+			
+			osVersion.Text = osVer+" "+type;
+			program_list.GridLines = true;
+			program_list.Columns.Add("Program Name:",230, HorizontalAlignment.Center);
+			program_list.Columns.Add("Version Number:",-2,HorizontalAlignment.Center);
+			string[] row = new string[2];
+			string key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+			using (RegistryKey reg = Registry.LocalMachine.OpenSubKey(key)){
+				foreach(string progName in reg.GetSubKeyNames()){
+					using(RegistryKey regKey = reg.OpenSubKey(progName)){
+						try{
+							if(!(regKey.GetValue("DisplayName") == null) && 
+							   !(regKey.GetValue("DisplayName").ToString().Contains("Security Update")) &&
+							  !(regKey.GetValue("DisplayName").ToString().Contains("Update for"))){
+								row[0] = regKey.GetValue("DisplayName").ToString();
+								if(!(regKey.GetValue("DisplayVersion") == null)){
+									row[1] = regKey.GetValue("DisplayVersion").ToString();
+								}
+								else{
+									row[1] = "Version not specified";
+								}
+							}
+							
+						}
+						catch(Exception ex){
+							
+						}
+					}
+					if(!(row[0] == null) && !(row[0] == "")){
+					ListViewItem item = new ListViewItem(row);
+					program_list.Items.Add(item);
+					}
+					Array.Clear(row, 0, row.Length);
+				}
+			}
 		}
 	}
 }
