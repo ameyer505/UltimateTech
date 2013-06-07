@@ -102,6 +102,8 @@ namespace ComputerStatus
 			this.sfc_scan = new System.Windows.Forms.Button();
 			this.drive_name_label = new System.Windows.Forms.Label();
 			this.software_tab = new System.Windows.Forms.TabPage();
+			this.osVersion = new System.Windows.Forms.TextBox();
+			this.osVersion_label = new System.Windows.Forms.Label();
 			this.program_list = new System.Windows.Forms.ListView();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.devel = new System.Windows.Forms.Label();
@@ -112,8 +114,6 @@ namespace ComputerStatus
 			this.outputToTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.emailOutputTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.osVersion_label = new System.Windows.Forms.Label();
-			this.osVersion = new System.Windows.Forms.TextBox();
 			this.tab_control.SuspendLayout();
 			this.local_computer_tab.SuspendLayout();
 			this.network_tab.SuspendLayout();
@@ -546,6 +546,22 @@ namespace ComputerStatus
 			this.software_tab.Text = "Software";
 			this.software_tab.UseVisualStyleBackColor = true;
 			// 
+			// osVersion
+			// 
+			this.osVersion.Location = new System.Drawing.Point(78, 4);
+			this.osVersion.Name = "osVersion";
+			this.osVersion.ReadOnly = true;
+			this.osVersion.Size = new System.Drawing.Size(293, 20);
+			this.osVersion.TabIndex = 2;
+			// 
+			// osVersion_label
+			// 
+			this.osVersion_label.Location = new System.Drawing.Point(7, 7);
+			this.osVersion_label.Name = "osVersion_label";
+			this.osVersion_label.Size = new System.Drawing.Size(69, 23);
+			this.osVersion_label.TabIndex = 1;
+			this.osVersion_label.Text = "OS Version:";
+			// 
 			// program_list
 			// 
 			this.program_list.Activation = System.Windows.Forms.ItemActivation.OneClick;
@@ -585,7 +601,7 @@ namespace ComputerStatus
 			// 
 			this.menuStrip1.Location = new System.Drawing.Point(0, 24);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(413, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(405, 24);
 			this.menuStrip1.TabIndex = 3;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -595,7 +611,7 @@ namespace ComputerStatus
 									this.fileToolStripMenuItem});
 			this.menuStrip2.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip2.Name = "menuStrip2";
-			this.menuStrip2.Size = new System.Drawing.Size(413, 24);
+			this.menuStrip2.Size = new System.Drawing.Size(405, 24);
 			this.menuStrip2.TabIndex = 4;
 			this.menuStrip2.Text = "menuStrip2";
 			// 
@@ -627,27 +643,11 @@ namespace ComputerStatus
 			this.exitToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
 			this.exitToolStripMenuItem.Text = "Exit";
 			// 
-			// osVersion_label
-			// 
-			this.osVersion_label.Location = new System.Drawing.Point(7, 7);
-			this.osVersion_label.Name = "osVersion_label";
-			this.osVersion_label.Size = new System.Drawing.Size(69, 23);
-			this.osVersion_label.TabIndex = 1;
-			this.osVersion_label.Text = "OS Version:";
-			// 
-			// osVersion
-			// 
-			this.osVersion.Location = new System.Drawing.Point(78, 4);
-			this.osVersion.Name = "osVersion";
-			this.osVersion.ReadOnly = true;
-			this.osVersion.Size = new System.Drawing.Size(293, 20);
-			this.osVersion.TabIndex = 2;
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(413, 253);
+			this.ClientSize = new System.Drawing.Size(405, 253);
 			this.Controls.Add(this.linked_in);
 			this.Controls.Add(this.devel);
 			this.Controls.Add(this.tab_control);
@@ -1009,11 +1009,9 @@ namespace ComputerStatus
 		
 		void setupSoftwareTab(){
 			string osVer = (from val in new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem").Get().OfType<ManagementObject>() select val.GetPropertyValue("Caption")).FirstOrDefault().ToString();
-			string type = System.Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
-			
-			osVersion.Text = osVer+" "+type;
+			osVersion.Text = osVer;
 			program_list.GridLines = true;
-			program_list.Columns.Add("Program Name:",230, HorizontalAlignment.Center);
+			program_list.Columns.Add("Program Name:",220, HorizontalAlignment.Center);
 			program_list.Columns.Add("Version Number:",-2,HorizontalAlignment.Center);
 			string[] row = new string[2];
 			string key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
