@@ -700,6 +700,8 @@ namespace ComputerStatus
 			this.menuStrip2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
+			
+			setupTabs();
 		}
 		private System.Windows.Forms.Label device_manager_label;
 		private System.Windows.Forms.ListView hardware_list;
