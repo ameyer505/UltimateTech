@@ -22,6 +22,7 @@
  using Microsoft.Win32;
  using System.Security.Permissions;
  using System.Collections;
+ using System.Collections.Generic;
 
 
  
@@ -105,6 +106,9 @@ namespace ComputerStatus
 			this.osVersion = new System.Windows.Forms.TextBox();
 			this.osVersion_label = new System.Windows.Forms.Label();
 			this.program_list = new System.Windows.Forms.ListView();
+			this.hardware_tab = new System.Windows.Forms.TabPage();
+			this.hardware_list = new System.Windows.Forms.ListView();
+			this.device_manager_label = new System.Windows.Forms.Label();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.devel = new System.Windows.Forms.Label();
 			this.linked_in = new System.Windows.Forms.LinkLabel();
@@ -112,13 +116,13 @@ namespace ComputerStatus
 			this.menuStrip2 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.outputToTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.emailOutputTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tab_control.SuspendLayout();
 			this.local_computer_tab.SuspendLayout();
 			this.network_tab.SuspendLayout();
 			this.local_storage_tab.SuspendLayout();
 			this.software_tab.SuspendLayout();
+			this.hardware_tab.SuspendLayout();
 			this.menuStrip2.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -128,6 +132,7 @@ namespace ComputerStatus
 			this.tab_control.Controls.Add(this.network_tab);
 			this.tab_control.Controls.Add(this.local_storage_tab);
 			this.tab_control.Controls.Add(this.software_tab);
+			this.tab_control.Controls.Add(this.hardware_tab);
 			this.tab_control.Location = new System.Drawing.Point(12, 23);
 			this.tab_control.Name = "tab_control";
 			this.tab_control.SelectedIndex = 0;
@@ -573,6 +578,36 @@ namespace ComputerStatus
 			this.program_list.UseCompatibleStateImageBehavior = false;
 			this.program_list.View = System.Windows.Forms.View.Details;
 			// 
+			// hardware_tab
+			// 
+			this.hardware_tab.Controls.Add(this.hardware_list);
+			this.hardware_tab.Controls.Add(this.device_manager_label);
+			this.hardware_tab.Location = new System.Drawing.Point(4, 22);
+			this.hardware_tab.Name = "hardware_tab";
+			this.hardware_tab.Padding = new System.Windows.Forms.Padding(3);
+			this.hardware_tab.Size = new System.Drawing.Size(377, 183);
+			this.hardware_tab.TabIndex = 4;
+			this.hardware_tab.Text = "Hardware";
+			this.hardware_tab.UseVisualStyleBackColor = true;
+			// 
+			// hardware_list
+			// 
+			this.hardware_list.Activation = System.Windows.Forms.ItemActivation.OneClick;
+			this.hardware_list.Location = new System.Drawing.Point(7, 19);
+			this.hardware_list.Name = "hardware_list";
+			this.hardware_list.Size = new System.Drawing.Size(367, 164);
+			this.hardware_list.TabIndex = 0;
+			this.hardware_list.UseCompatibleStateImageBehavior = false;
+			this.hardware_list.View = System.Windows.Forms.View.Details;
+			// 
+			// device_manager_label
+			// 
+			this.device_manager_label.Location = new System.Drawing.Point(7, 4);
+			this.device_manager_label.Name = "device_manager_label";
+			this.device_manager_label.Size = new System.Drawing.Size(100, 23);
+			this.device_manager_label.TabIndex = 0;
+			this.device_manager_label.Text = "Device Manager:";
+			// 
 			// backgroundWorker1
 			// 
 			this.backgroundWorker1.WorkerReportsProgress = true;
@@ -619,7 +654,6 @@ namespace ComputerStatus
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 									this.outputToTextFileToolStripMenuItem,
-									this.emailOutputTextFileToolStripMenuItem,
 									this.exitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -628,20 +662,16 @@ namespace ComputerStatus
 			// outputToTextFileToolStripMenuItem
 			// 
 			this.outputToTextFileToolStripMenuItem.Name = "outputToTextFileToolStripMenuItem";
-			this.outputToTextFileToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+			this.outputToTextFileToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.outputToTextFileToolStripMenuItem.Text = "Output to Text File";
-			// 
-			// emailOutputTextFileToolStripMenuItem
-			// 
-			this.emailOutputTextFileToolStripMenuItem.Name = "emailOutputTextFileToolStripMenuItem";
-			this.emailOutputTextFileToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-			this.emailOutputTextFileToolStripMenuItem.Text = "Email Output Text File";
+			this.outputToTextFileToolStripMenuItem.Click += new System.EventHandler(this.OutputToTextFileToolStripMenuItemClick);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.exitToolStripMenuItem.Text = "Exit";
+			this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
 			// 
 			// MainForm
 			// 
@@ -665,16 +695,17 @@ namespace ComputerStatus
 			this.local_storage_tab.PerformLayout();
 			this.software_tab.ResumeLayout(false);
 			this.software_tab.PerformLayout();
+			this.hardware_tab.ResumeLayout(false);
 			this.menuStrip2.ResumeLayout(false);
 			this.menuStrip2.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
-			
-			setupTabs();
 		}
+		private System.Windows.Forms.Label device_manager_label;
+		private System.Windows.Forms.ListView hardware_list;
+		private System.Windows.Forms.TabPage hardware_tab;
 		private System.Windows.Forms.TextBox osVersion;
 		private System.Windows.Forms.Label osVersion_label;
-		private System.Windows.Forms.ToolStripMenuItem emailOutputTextFileToolStripMenuItem;
 		private System.Windows.Forms.Label gateway_label;
 		private System.Windows.Forms.TextBox gateway;
 		private System.Windows.Forms.Label domain_label;
@@ -692,6 +723,7 @@ namespace ComputerStatus
 			setNetwork();
 			setlocalStorage();
 			setupSoftwareTab();
+			setupHardwareTab();
 		}
 		
 		private System.Windows.Forms.LinkLabel linked_in;
@@ -807,11 +839,23 @@ namespace ComputerStatus
 			foreach (NetworkInterface nic in interfaces){
 				if(nic.OperationalStatus == OperationalStatus.Up){
 					internet = nic.Name;
-					gateway.Text = nic.GetIPProperties().GatewayAddresses.FirstOrDefault().Address.ToString();
+					gateway.Text = getCurrentGateway();
 					break;
 				}
 			}
 			return internet;
+		}
+		
+		string getCurrentGateway(){
+			string gateway = "";
+			NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+			foreach (NetworkInterface nic in interfaces){
+				if(nic.OperationalStatus == OperationalStatus.Up){
+					gateway = nic.GetIPProperties().GatewayAddresses.FirstOrDefault().Address.ToString();
+					break;
+				}
+			}
+			return gateway;
 		}
 		
 		string getIP(){
@@ -1007,11 +1051,12 @@ namespace ComputerStatus
 			System.Diagnostics.Process.Start(link);
 		}
 		
-		void setupSoftwareTab(){
+		List<string> setupSoftwareTab(){
+			List<string> softList = new List<string>();
 			string osVer = (from val in new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem").Get().OfType<ManagementObject>() select val.GetPropertyValue("Caption")).FirstOrDefault().ToString();
 			osVersion.Text = osVer;
 			program_list.GridLines = true;
-			program_list.Columns.Add("Program Name:",220, HorizontalAlignment.Center);
+			program_list.Columns.Add("Program Name:",215, HorizontalAlignment.Center);
 			program_list.Columns.Add("Version Number:",-2,HorizontalAlignment.Center);
 			string[] row = new string[2];
 			string key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
@@ -1021,7 +1066,8 @@ namespace ComputerStatus
 						try{
 							if(!(regKey.GetValue("DisplayName") == null) && 
 							   !(regKey.GetValue("DisplayName").ToString().Contains("Security Update")) &&
-							  !(regKey.GetValue("DisplayName").ToString().Contains("Update for"))){
+							  !(regKey.GetValue("DisplayName").ToString().Contains("Update for")) &&
+							  !(regKey.GetValue("DisplayName").ToString().Contains("Service Pack"))){
 								row[0] = regKey.GetValue("DisplayName").ToString();
 								if(!(regKey.GetValue("DisplayVersion") == null)){
 									row[1] = regKey.GetValue("DisplayVersion").ToString();
@@ -1037,12 +1083,122 @@ namespace ComputerStatus
 						}
 					}
 					if(!(row[0] == null) && !(row[0] == "")){
-					ListViewItem item = new ListViewItem(row);
-					program_list.Items.Add(item);
-					}
+						ListViewItem item = new ListViewItem(row);
+						softList.Add(row[0] + " --- "+row[1]);
+						program_list.Items.Add(item);
+						}
 					Array.Clear(row, 0, row.Length);
 				}
 			}
+			return softList;
+		}
+		
+		List<string> setupHardwareTab(){
+			List<string> hardware = new List<string>();
+			ManagementObjectSearcher deviceList = new ManagementObjectSearcher("Select Name, Status from Win32_PnPEntity");
+			hardware_list.GridLines = true;
+			hardware_list.Columns.Add("Device Name:",215,HorizontalAlignment.Center);
+			hardware_list.Columns.Add("Status:",-2,HorizontalAlignment.Center);
+			string[] row = new string[2];
+			if(deviceList != null){
+				foreach(ManagementObject device in deviceList.Get()){					
+					string name = device.GetPropertyValue("Name").ToString();
+					string status = device.GetPropertyValue("Status").ToString();
+					if(!(status == null) && !(status == "")){
+						hardware.Add(name+" --- "+status);
+						row[0] = name;
+						row[1] = status;
+						ListViewItem item = new ListViewItem(row);
+						hardware_list.Items.Add(item);
+						Array.Clear(row,0,row.Length);
+					}
+				}
+			}
+			return hardware;
+		}
+		
+		void writeLogFile(){
+			List<string> logFile = new List<string>();
+			string[] currentLogOn = getCurrentUser();
+			string domain = currentLogOn[0];
+			string currentUser = currentLogOn[1];
+			string osVer = (from val in new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem").Get().OfType<ManagementObject>() select val.GetPropertyValue("Caption")).FirstOrDefault().ToString();
+			TextWriter log = new StreamWriter(@"C:\Users\"+currentUser+@"\Desktop\log.txt");
+			logFile.Add("***ULTIMATETECH LOG FILE GENERATED ON "+DateTime.Now.ToString()+"***");
+			logFile.Add("");
+			logFile.Add("Local Computer:");
+			logFile.Add("Operating System: "+osVer);
+			logFile.Add("Domain: "+domain);
+			logFile.Add("Current User: "+currentUser);
+			logFile.Add("Computer Name: "+getComputerName());
+			logFile.Add("");
+			logFile.Add("Network Information:");
+			logFile.Add("Type of Connection: "+getCurrentInterface());
+			logFile.Add("MAC Address: "+getMAC());
+			logFile.Add("IP: "+getIP());
+			logFile.Add("Gateway: "+ getCurrentGateway());
+			logFile.Add("");
+			logFile.Add("Local Drives:");
+			DriveInfo[] drive_info = DriveInfo.GetDrives();
+			foreach(DriveInfo d in drive_info){
+				if(d.IsReady == true && d.DriveType != DriveType.Network){
+					logFile.Add("Drive Letter: "+d.Name);
+					logFile.Add("Drive Volume Name: "+d.VolumeLabel);
+					logFile.Add("Drive Format: "+d.DriveFormat);
+					double totalSpace = (double)(d.TotalSize)/1024/1024/1024;
+					double availSpace = (double)(d.AvailableFreeSpace)/1024/1024/1024;
+					logFile.Add("Total Space: "+totalSpace.ToString("#.##")+" GB");
+					logFile.Add("Free Space: "+availSpace.ToString("#.##")+" GB");
+					logFile.Add("");
+				}
+			}
+			logFile.Add("");
+			logFile.Add("Software:");
+			List<string> softList = setupSoftwareTab();
+			
+			
+			foreach(string s in softList){
+				logFile.Add(s); 
+			}
+			
+			logFile.Add("");
+			logFile.Add("");
+			logFile.Add("Hardware:");
+			List<string> hardList = setupHardwareTab();
+			foreach(string s in hardList){
+				logFile.Add(s);
+			}
+			
+			logFile.Add("");
+			logFile.Add("");
+			logFile.Add("***COMPLETION OF LOG FILE***");
+			foreach(string s in logFile){
+				log.WriteLine(s);
+			}
+			
+			
+			log.Close();
+			MessageBox.Show("log.txt has been generated and placed on your desktop");
+		}
+		
+		void sendLogEmail(){
+			
+		}
+		
+		
+		void OutputToTextFileToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			writeLogFile();
+		}
+		
+		void EmailOutputTextFileToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			
+		}
+		
+		void ExitToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			Environment.Exit(0);
 		}
 	}
 }
