@@ -75,6 +75,9 @@ namespace ComputerStatus
 			this.ram_usage_label = new System.Windows.Forms.Label();
 			this.computer_name_label = new System.Windows.Forms.Label();
 			this.network_tab = new System.Windows.Forms.TabPage();
+			this.arp_button = new System.Windows.Forms.Button();
+			this.subnet = new System.Windows.Forms.TextBox();
+			this.subnet_label = new System.Windows.Forms.Label();
 			this.gateway = new System.Windows.Forms.TextBox();
 			this.gateway_label = new System.Windows.Forms.Label();
 			this.reset_net_button = new System.Windows.Forms.Button();
@@ -275,6 +278,9 @@ namespace ComputerStatus
 			// 
 			// network_tab
 			// 
+			this.network_tab.Controls.Add(this.arp_button);
+			this.network_tab.Controls.Add(this.subnet);
+			this.network_tab.Controls.Add(this.subnet_label);
 			this.network_tab.Controls.Add(this.gateway);
 			this.network_tab.Controls.Add(this.gateway_label);
 			this.network_tab.Controls.Add(this.reset_net_button);
@@ -296,17 +302,45 @@ namespace ComputerStatus
 			this.network_tab.Text = "Network";
 			this.network_tab.UseVisualStyleBackColor = true;
 			// 
+			// arp_button
+			// 
+			this.arp_button.Location = new System.Drawing.Point(201, 125);
+			this.arp_button.Name = "arp_button";
+			this.arp_button.Size = new System.Drawing.Size(135, 23);
+			this.arp_button.TabIndex = 15;
+			this.arp_button.Text = "Local Connections (ARP)";
+			this.arp_button.UseVisualStyleBackColor = true;
+			this.arp_button.Click += new System.EventHandler(this.Arp_buttonClick);
+			// 
+			// subnet
+			// 
+			this.subnet.Location = new System.Drawing.Point(6, 98);
+			this.subnet.Name = "subnet";
+			this.subnet.ReadOnly = true;
+			this.subnet.Size = new System.Drawing.Size(166, 20);
+			this.subnet.TabIndex = 14;
+			this.subnet.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			// 
+			// subnet_label
+			// 
+			this.subnet_label.Location = new System.Drawing.Point(41, 78);
+			this.subnet_label.Name = "subnet_label";
+			this.subnet_label.Size = new System.Drawing.Size(74, 23);
+			this.subnet_label.TabIndex = 13;
+			this.subnet_label.Text = "Subnet Mask:";
+			// 
 			// gateway
 			// 
-			this.gateway.Location = new System.Drawing.Point(260, 52);
+			this.gateway.Location = new System.Drawing.Point(187, 18);
 			this.gateway.Name = "gateway";
 			this.gateway.ReadOnly = true;
-			this.gateway.Size = new System.Drawing.Size(85, 20);
+			this.gateway.Size = new System.Drawing.Size(176, 20);
 			this.gateway.TabIndex = 12;
+			this.gateway.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// gateway_label
 			// 
-			this.gateway_label.Location = new System.Drawing.Point(208, 52);
+			this.gateway_label.Location = new System.Drawing.Point(253, 3);
 			this.gateway_label.Name = "gateway_label";
 			this.gateway_label.Size = new System.Drawing.Size(55, 23);
 			this.gateway_label.TabIndex = 11;
@@ -314,9 +348,9 @@ namespace ComputerStatus
 			// 
 			// reset_net_button
 			// 
-			this.reset_net_button.Location = new System.Drawing.Point(237, 154);
+			this.reset_net_button.Location = new System.Drawing.Point(201, 154);
 			this.reset_net_button.Name = "reset_net_button";
-			this.reset_net_button.Size = new System.Drawing.Size(108, 23);
+			this.reset_net_button.Size = new System.Drawing.Size(135, 23);
 			this.reset_net_button.TabIndex = 10;
 			this.reset_net_button.Text = "Reset Connection";
 			this.reset_net_button.UseVisualStyleBackColor = true;
@@ -324,7 +358,7 @@ namespace ComputerStatus
 			// 
 			// network_test_button
 			// 
-			this.network_test_button.Location = new System.Drawing.Point(117, 154);
+			this.network_test_button.Location = new System.Drawing.Point(41, 154);
 			this.network_test_button.Name = "network_test_button";
 			this.network_test_button.Size = new System.Drawing.Size(94, 23);
 			this.network_test_button.TabIndex = 9;
@@ -334,9 +368,9 @@ namespace ComputerStatus
 			// 
 			// refresh_button
 			// 
-			this.refresh_button.Location = new System.Drawing.Point(19, 154);
+			this.refresh_button.Location = new System.Drawing.Point(41, 125);
 			this.refresh_button.Name = "refresh_button";
-			this.refresh_button.Size = new System.Drawing.Size(75, 23);
+			this.refresh_button.Size = new System.Drawing.Size(94, 23);
 			this.refresh_button.TabIndex = 8;
 			this.refresh_button.Text = "Refresh";
 			this.refresh_button.UseVisualStyleBackColor = true;
@@ -344,47 +378,51 @@ namespace ComputerStatus
 			// 
 			// dns
 			// 
-			this.dns.Location = new System.Drawing.Point(117, 117);
+			this.dns.Location = new System.Drawing.Point(187, 98);
 			this.dns.Name = "dns";
 			this.dns.ReadOnly = true;
-			this.dns.Size = new System.Drawing.Size(228, 20);
+			this.dns.Size = new System.Drawing.Size(176, 20);
 			this.dns.TabIndex = 7;
+			this.dns.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// mac_addr
 			// 
-			this.mac_addr.Location = new System.Drawing.Point(117, 81);
+			this.mac_addr.Location = new System.Drawing.Point(187, 55);
 			this.mac_addr.Name = "mac_addr";
 			this.mac_addr.ReadOnly = true;
-			this.mac_addr.Size = new System.Drawing.Size(228, 20);
+			this.mac_addr.Size = new System.Drawing.Size(176, 20);
 			this.mac_addr.TabIndex = 6;
+			this.mac_addr.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// ip_addr
 			// 
-			this.ip_addr.Location = new System.Drawing.Point(117, 52);
+			this.ip_addr.Location = new System.Drawing.Point(6, 55);
 			this.ip_addr.Name = "ip_addr";
 			this.ip_addr.ReadOnly = true;
-			this.ip_addr.Size = new System.Drawing.Size(84, 20);
+			this.ip_addr.Size = new System.Drawing.Size(166, 20);
 			this.ip_addr.TabIndex = 5;
+			this.ip_addr.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// current_interface
 			// 
-			this.current_interface.Location = new System.Drawing.Point(117, 15);
+			this.current_interface.Location = new System.Drawing.Point(6, 18);
 			this.current_interface.Name = "current_interface";
 			this.current_interface.ReadOnly = true;
-			this.current_interface.Size = new System.Drawing.Size(228, 20);
+			this.current_interface.Size = new System.Drawing.Size(166, 20);
 			this.current_interface.TabIndex = 4;
+			this.current_interface.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// current_interface_label
 			// 
-			this.current_interface_label.Location = new System.Drawing.Point(19, 18);
+			this.current_interface_label.Location = new System.Drawing.Point(41, 3);
 			this.current_interface_label.Name = "current_interface_label";
 			this.current_interface_label.Size = new System.Drawing.Size(100, 23);
 			this.current_interface_label.TabIndex = 3;
-			this.current_interface_label.Text = "Current Interface:";
+			this.current_interface_label.Text = "Current Device:";
 			// 
 			// dns_label
 			// 
-			this.dns_label.Location = new System.Drawing.Point(19, 117);
+			this.dns_label.Location = new System.Drawing.Point(236, 78);
 			this.dns_label.Name = "dns_label";
 			this.dns_label.Size = new System.Drawing.Size(100, 23);
 			this.dns_label.TabIndex = 2;
@@ -392,7 +430,7 @@ namespace ComputerStatus
 			// 
 			// mac_addr_label
 			// 
-			this.mac_addr_label.Location = new System.Drawing.Point(19, 81);
+			this.mac_addr_label.Location = new System.Drawing.Point(236, 41);
 			this.mac_addr_label.Name = "mac_addr_label";
 			this.mac_addr_label.Size = new System.Drawing.Size(100, 23);
 			this.mac_addr_label.TabIndex = 1;
@@ -400,7 +438,7 @@ namespace ComputerStatus
 			// 
 			// ip_addr_label
 			// 
-			this.ip_addr_label.Location = new System.Drawing.Point(19, 52);
+			this.ip_addr_label.Location = new System.Drawing.Point(41, 41);
 			this.ip_addr_label.Name = "ip_addr_label";
 			this.ip_addr_label.Size = new System.Drawing.Size(74, 26);
 			this.ip_addr_label.TabIndex = 0;
@@ -677,6 +715,7 @@ namespace ComputerStatus
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.MinimumSize = new System.Drawing.Size(425,290);
 			this.ClientSize = new System.Drawing.Size(405, 253);
 			this.Controls.Add(this.linked_in);
 			this.Controls.Add(this.devel);
@@ -703,6 +742,9 @@ namespace ComputerStatus
 			
 			setupTabs();
 		}
+		private System.Windows.Forms.Label subnet_label;
+		private System.Windows.Forms.TextBox subnet;
+		private System.Windows.Forms.Button arp_button;
 		private System.Windows.Forms.Label device_manager_label;
 		private System.Windows.Forms.ListView hardware_list;
 		private System.Windows.Forms.TabPage hardware_tab;
@@ -780,9 +822,10 @@ namespace ComputerStatus
 		
 		void setNetwork(){
 			current_interface.Text = getCurrentInterface();
-			ip_addr.Text = getIP();
+			ip_addr.Text = getIP().ToString();
 			mac_addr.Text = getMAC();
 			dns.Text = getDNS();
+			subnet.Text = getSubnet(getIP());
 		}
 		
 		void setLocal(){
@@ -860,13 +903,13 @@ namespace ComputerStatus
 			return gateway;
 		}
 		
-		string getIP(){
+		IPAddress getIP(){
 			IPHostEntry host;
-			string ip = "";
+			IPAddress ip = null;
 			host = Dns.GetHostEntry(Dns.GetHostName());
 			foreach (IPAddress addr in host.AddressList){
 				if(addr.AddressFamily == AddressFamily.InterNetwork){
-					ip = addr.ToString();
+					ip = addr;
 					break;
 					}
 				}
@@ -912,6 +955,23 @@ namespace ComputerStatus
 				dnsServers = dnsServers+dnsAddr[i].ToString();
 			return dnsServers;
 		}
+		
+		string getSubnet(IPAddress ip){
+			string subnet = "";
+			NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+			foreach(NetworkInterface nic in interfaces){
+				foreach(UnicastIPAddressInformation unicast in nic.GetIPProperties().UnicastAddresses){
+					if(unicast.Address.AddressFamily == AddressFamily.InterNetwork){
+						if(ip.Equals(unicast.Address)){
+							subnet = unicast.IPv4Mask.ToString();
+						}
+					}
+				}
+			}
+			return subnet;
+		}
+		
+		
 		
 		//Network test
 		void Button2Click(object sender, EventArgs e)
@@ -1023,6 +1083,12 @@ namespace ComputerStatus
 			proc.Start();
 		}
 		
+		
+		//Resets network connection by running
+		//ipconfig /release
+		//ipconfig /flushdns
+		//ipconfig /renew
+		//And restarting network services on the machine
 		void Reset_net_buttonClick(object sender, EventArgs e)
 		{					
 			executeCommand("ipconfig.exe", @"/release");
@@ -1037,6 +1103,7 @@ namespace ComputerStatus
 			               
 		}
 		
+		//Helper method for reset_net_buttonclick
 		void executeCommand(string command, string args){
 			Process proc = new Process();
 			proc.StartInfo.FileName = command;
@@ -1045,21 +1112,24 @@ namespace ComputerStatus
 			proc.WaitForExit();
 		}
 		
-		
-		
+		//Setups up LinkedIn link
 		void Linked_inLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			String link = "http://goo.gl/TW5Da";
 			System.Diagnostics.Process.Start(link);
 		}
 		
-		List<string> setupSoftwareTab(){
-			List<string> softList = new List<string>();
-			string osVer = (from val in new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem").Get().OfType<ManagementObject>() select val.GetPropertyValue("Caption")).FirstOrDefault().ToString();
-			osVersion.Text = osVer;
+		void setupSoftwareTab(){
 			program_list.GridLines = true;
 			program_list.Columns.Add("Program Name:",215, HorizontalAlignment.Center);
 			program_list.Columns.Add("Version Number:",-2,HorizontalAlignment.Center);
+			string osVer = (from val in new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem").Get().OfType<ManagementObject>() select val.GetPropertyValue("Caption")).FirstOrDefault().ToString();
+			osVersion.Text = osVer;
+			makeSoftwareList();
+		}
+		
+		List<string> makeSoftwareList(){
+			List<string> softList = new List<string>();
 			string[] row = new string[2];
 			string key = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
 			using (RegistryKey reg = Registry.LocalMachine.OpenSubKey(key)){
@@ -1095,12 +1165,16 @@ namespace ComputerStatus
 			return softList;
 		}
 		
-		List<string> setupHardwareTab(){
-			List<string> hardware = new List<string>();
-			ManagementObjectSearcher deviceList = new ManagementObjectSearcher("Select Name, Status from Win32_PnPEntity");
+		void setupHardwareTab(){
 			hardware_list.GridLines = true;
 			hardware_list.Columns.Add("Device Name:",215,HorizontalAlignment.Center);
 			hardware_list.Columns.Add("Status:",-2,HorizontalAlignment.Center);
+			makeHardwareList();
+		}
+		
+		List<string> makeHardwareList(){
+			List<string> hardware = new List<string>();
+			ManagementObjectSearcher deviceList = new ManagementObjectSearcher("Select Name, Status from Win32_PnPEntity");
 			string[] row = new string[2];
 			if(deviceList != null){
 				foreach(ManagementObject device in deviceList.Get()){					
@@ -1125,7 +1199,7 @@ namespace ComputerStatus
 			string domain = currentLogOn[0];
 			string currentUser = currentLogOn[1];
 			string osVer = (from val in new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem").Get().OfType<ManagementObject>() select val.GetPropertyValue("Caption")).FirstOrDefault().ToString();
-			TextWriter log = new StreamWriter(@"C:\Users\"+currentUser+@"\Desktop\log.txt");
+			TextWriter log = new StreamWriter(@"C:\Users\"+currentUser+@"\Desktop\Log.txt");
 			logFile.Add("***ULTIMATETECH LOG FILE GENERATED ON "+DateTime.Now.ToString()+"***");
 			logFile.Add("");
 			logFile.Add("Local Computer:");
@@ -1137,8 +1211,10 @@ namespace ComputerStatus
 			logFile.Add("Network Information:");
 			logFile.Add("Type of Connection: "+getCurrentInterface());
 			logFile.Add("MAC Address: "+getMAC());
-			logFile.Add("IP: "+getIP());
+			logFile.Add("IP: "+getIP().ToString());
 			logFile.Add("Gateway: "+ getCurrentGateway());
+			logFile.Add("Subnet mask: "+getSubnet(getIP()));
+			logFile.Add("ARP:"+arp());
 			logFile.Add("");
 			logFile.Add("Local Drives:");
 			DriveInfo[] drive_info = DriveInfo.GetDrives();
@@ -1156,7 +1232,7 @@ namespace ComputerStatus
 			}
 			logFile.Add("");
 			logFile.Add("Software:");
-			List<string> softList = setupSoftwareTab();
+			List<string> softList = makeSoftwareList();
 			
 			
 			foreach(string s in softList){
@@ -1166,7 +1242,7 @@ namespace ComputerStatus
 			logFile.Add("");
 			logFile.Add("");
 			logFile.Add("Hardware:");
-			List<string> hardList = setupHardwareTab();
+			List<string> hardList = makeHardwareList();
 			foreach(string s in hardList){
 				logFile.Add(s);
 			}
@@ -1180,11 +1256,7 @@ namespace ComputerStatus
 			
 			
 			log.Close();
-			MessageBox.Show("log.txt has been generated and placed on your desktop");
-		}
-		
-		void sendLogEmail(){
-			
+			MessageBox.Show("Log.txt has been generated and placed on your desktop");
 		}
 		
 		
@@ -1193,14 +1265,31 @@ namespace ComputerStatus
 			writeLogFile();
 		}
 		
-		void EmailOutputTextFileToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			
-		}
 		
 		void ExitToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			Environment.Exit(0);
+		}
+		
+		void Arp_buttonClick(object sender, EventArgs e)
+		{
+			string output = arp();
+			MessageBox.Show(output);
+		}
+		
+		string arp(){
+			string command = "arp";
+			string args = "-a";
+			Process proc = new Process();
+			proc.StartInfo.FileName = command;
+			proc.StartInfo.RedirectStandardOutput = true;
+			proc.StartInfo.UseShellExecute = false;
+			proc.StartInfo.Arguments = args;
+			proc.StartInfo.CreateNoWindow = true;
+			proc.Start();
+			string output = proc.StandardOutput.ReadToEnd();
+			proc.WaitForExit();
+			return output;
 		}
 	}
 }

@@ -64,7 +64,11 @@ namespace ComputerStatus
 			usage += cpu.NextValue();
 			Thread.Sleep(50);
 			usage += cpu.NextValue();
-			int use = (int)(usage/3);
+			Thread.Sleep(50);
+			usage += cpu.NextValue();
+			Thread.Sleep(50);
+			usage += cpu.NextValue();
+			int use = (int)(usage/5);
 			string cpuString = use.ToString();
 			cpu_percent.Text = cpuString+"%";
 			cpu_usage.Value = use;
