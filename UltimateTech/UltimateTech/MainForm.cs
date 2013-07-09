@@ -24,7 +24,7 @@ using Microsoft.Win32;
 using System.Security.Permissions;
 using System.Collections;
 
-namespace ComputerStatus
+namespace UltimateTech
 {
 	/// <summary>
 	/// Description of MainForm.
@@ -624,6 +624,12 @@ namespace ComputerStatus
 			screenshotGraphics.CopyFromScreen(Screen.PrimaryScreen.Bounds.X,Screen.PrimaryScreen.Bounds.Y,0,0,Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
 			screenshotGraphics.Dispose();
 			return screenshot;
+		}
+		
+		void AboutUltimateTechToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			About about = new About();
+			about.ShowDialog();
 		}
 	}
 }

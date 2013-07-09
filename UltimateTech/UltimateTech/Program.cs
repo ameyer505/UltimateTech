@@ -9,7 +9,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace ComputerStatus
+namespace UltimateTech
 {
 	/// <summary>
 	/// Class with program entry point.

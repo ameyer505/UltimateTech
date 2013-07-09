@@ -26,7 +26,7 @@
 
 
  
-namespace ComputerStatus
+namespace UltimateTech
 {
 	partial class MainForm
 	{
@@ -119,8 +119,10 @@ namespace ComputerStatus
 			this.menuStrip2 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.outputToTextFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.takeScreenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.aboutUltimateTechToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tab_control.SuspendLayout();
 			this.local_computer_tab.SuspendLayout();
 			this.network_tab.SuspendLayout();
@@ -682,7 +684,8 @@ namespace ComputerStatus
 			// menuStrip2
 			// 
 			this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.fileToolStripMenuItem});
+									this.fileToolStripMenuItem,
+									this.aboutToolStripMenuItem});
 			this.menuStrip2.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip2.Name = "menuStrip2";
 			this.menuStrip2.Size = new System.Drawing.Size(409, 24);
@@ -706,6 +709,13 @@ namespace ComputerStatus
 			this.outputToTextFileToolStripMenuItem.Text = "Output to Text File";
 			this.outputToTextFileToolStripMenuItem.Click += new System.EventHandler(this.OutputToTextFileToolStripMenuItemClick);
 			// 
+			// takeScreenshotToolStripMenuItem
+			// 
+			this.takeScreenshotToolStripMenuItem.Name = "takeScreenshotToolStripMenuItem";
+			this.takeScreenshotToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+			this.takeScreenshotToolStripMenuItem.Text = "Take Screenshot";
+			this.takeScreenshotToolStripMenuItem.Click += new System.EventHandler(this.TakeScreenshotToolStripMenuItemClick);
+			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -713,12 +723,20 @@ namespace ComputerStatus
 			this.exitToolStripMenuItem.Text = "Exit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItemClick);
 			// 
-			// takeScreenshotToolStripMenuItem
+			// aboutToolStripMenuItem
 			// 
-			this.takeScreenshotToolStripMenuItem.Name = "takeScreenshotToolStripMenuItem";
-			this.takeScreenshotToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-			this.takeScreenshotToolStripMenuItem.Text = "Take Screenshot";
-			this.takeScreenshotToolStripMenuItem.Click += new System.EventHandler(this.TakeScreenshotToolStripMenuItemClick);
+			this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+									this.aboutUltimateTechToolStripMenuItem});
+			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+			this.aboutToolStripMenuItem.Text = "About";
+			// 
+			// aboutUltimateTechToolStripMenuItem
+			// 
+			this.aboutUltimateTechToolStripMenuItem.Name = "aboutUltimateTechToolStripMenuItem";
+			this.aboutUltimateTechToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+			this.aboutUltimateTechToolStripMenuItem.Text = "About UltimateTech";
+			this.aboutUltimateTechToolStripMenuItem.Click += new System.EventHandler(this.AboutUltimateTechToolStripMenuItemClick);
 			// 
 			// MainForm
 			// 
@@ -749,6 +767,8 @@ namespace ComputerStatus
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem aboutUltimateTechToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem takeScreenshotToolStripMenuItem;
 		private System.Windows.Forms.Label subnet_label;
 		private System.Windows.Forms.TextBox subnet;
